@@ -1,4 +1,4 @@
-FROM php:7.4.9-fpm-alpine
+FROM php:7.4.10-fpm-alpine
 MAINTAINER Norbert Kowalik <norbert.kowalik@icloud.com>
 
 RUN apk add --no-cache git zip zlib-dev libzip-dev nginx supervisor icu-dev yarn $PHPIZE_DEPS \
