@@ -15,7 +15,7 @@ RUN apk add --no-cache git zip zlib-dev libzip-dev nginx supervisor icu-dev yarn
         && mkdir -p /run/nginx
 
 COPY xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/http.d/default.conf
 COPY supervisord.conf /etc/supervisord.conf
 
 WORKDIR /usr/share/nginx/html/backend
