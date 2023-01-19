@@ -1,7 +1,7 @@
 FROM php:8.2.1-fpm-alpine
 MAINTAINER Norbert Kowalik <norbert.kowalik@icloud.com>
 
-RUN apk add --no-cache git zip zlib-dev libzip-dev nginx supervisor icu-dev yarn linux-headers postgresql-dev $PHPIZE_DEPS \
+RUN apk add --no-cache git zip zlib-dev libzip-dev nginx supervisor icu-dev yarn linux-headers postgresql-dev rabbitmq-c rabbitmq-c-dev $PHPIZE_DEPS \
         && curl --silent --show-error https://getcomposer.org/installer \
             | php -- --install-dir /usr/bin --filename composer \
         && mkdir /.composer \
@@ -11,7 +11,8 @@ RUN apk add --no-cache git zip zlib-dev libzip-dev nginx supervisor icu-dev yarn
         && composer config -g github-protocols https ssh \
         && docker-php-ext-install zip pdo pdo_pgsql pdo_mysql intl \
         && pecl install xdebug-3.2.0 \
-        && docker-php-ext-enable xdebug \
+        && pecl install amqp \
+        && docker-php-ext-enable xdebug amqp \
         && mkdir -p /run/nginx
 
 COPY xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
