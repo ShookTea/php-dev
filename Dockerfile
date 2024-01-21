@@ -1,19 +1,22 @@
-FROM php:8.2.1-fpm-alpine
+FROM php:8.3.2-fpm-alpine
 MAINTAINER Norbert Kowalik <norbert.kowalik@icloud.com>
 
-RUN apk add --no-cache git zip zlib-dev libzip-dev nginx supervisor icu-dev yarn linux-headers postgresql-dev rabbitmq-c rabbitmq-c-dev $PHPIZE_DEPS \
-        && curl --silent --show-error https://getcomposer.org/installer \
-            | php -- --install-dir /usr/bin --filename composer \
-        && mkdir /.composer \
-        && chown 1000:1000 /.composer \
-        && composer clear-cache \
-        && composer config -g repo.packagist composer https://packagist.org \
-        && composer config -g github-protocols https ssh \
-        && docker-php-ext-install zip pdo pdo_pgsql pdo_mysql intl \
-        && pecl install xdebug-3.2.0 \
-        && pecl install amqp \
-        && docker-php-ext-enable xdebug amqp \
-        && mkdir -p /run/nginx
+RUN apk add --no-cache git \
+    zip zlib-dev libzip-dev nginx supervisor icu-dev yarn linux-headers postgresql-dev \
+    rabbitmq-c rabbitmq-c-dev $PHPIZE_DEPS
+
+RUN curl --silent --show-error https://getcomposer.org/installer | php -- --install-dir /usr/bin --filename composer
+RUN mkdir /.composer
+RUN chown 1000:1000 /.composer
+RUN composer clear-cache
+RUN composer config -g repo.packagist composer https://packagist.org
+RUN composer config -g github-protocols https ssh
+
+RUN docker-php-ext-install zip pdo pdo_pgsql pdo_mysql intl
+RUN pecl install xdebug amqp
+RUN docker-php-ext-enable xdebug amqp
+
+RUN mkdir -p /run/nginx
 
 COPY xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 COPY nginx.conf /etc/nginx/http.d/default.conf
