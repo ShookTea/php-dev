@@ -1,4 +1,4 @@
-FROM php:8.3.2-fpm-alpine
+FROM php:8.3.9-fpm-alpine
 MAINTAINER Norbert Kowalik <norbert.kowalik@icloud.com>
 
 RUN apk add --no-cache git \
